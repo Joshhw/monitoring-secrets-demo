@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test-rest
+  name: test-rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-rest
+  template:
+    metadata:
+      labels:
+        app: test-rest
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - image: linkplatformnonprod.azurecr.io/test-rest:0.1.7
+          name: test-rest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "768Mi"
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+#          volumeMounts:
+#            - name: "test-rest"
+#              readOnly: true
+#              mountPath: "/etc/secrets/test-rest"
+#      volumes:
+#        - name: "test-rest"
+#          secret:
+#            secretName: "db-secret"
+#      restartPolicy: Always
